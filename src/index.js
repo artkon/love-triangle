@@ -3,36 +3,25 @@
  * @returns number of love triangles
  */
 module.exports = function getLoveTrianglesCount(preferences = []) {
-	//Сдвигаем массив вправо, теперь N = Index
-	preferences.splice(0, 0, 0);
-	var lovers = preferences;
+  //Сдвигаем массив вправо, теперь индексы соотвествуют
+  preferences.splice(0, 0, 0);
 
-	var count = 0;
-	var first;
-	var second;
-	var third;
-	var used = [];
+	let count = 0;
 
-  for(var i = 1; i < lovers.length - 2; i++){
-  	
-  	first = lovers[i];
-  	second = lovers[first];
-  	if(second == third) continue;
-  	third = lovers[second];
-  	if(second == first) continue;
+  for(let i = 1, len = preferences.length; i < len; i++){
+    const firstPos = preferences[i];
+    const secondPos = preferences[firstPos];
+    const thirdPos = preferences[secondPos];
 
-  	if( used.indexOf(first) != -1 
-  		|| used.indexOf(second) != -1
-  		|| used.indexOf(third) != -1 ){
-  		continue;
-  	}
-
-  	if(third == i){
-  		used.push(first);
-  		used.push(second);
-  		used.push(third);
-  		count++;
-  	}
+    const isRealTriangle = thirdPos == i;
+    const isNotSelfLove = firstPos != i && 
+                          secondPos != firstPos &&
+                          thirdPos != secondPos;
+                          
+    if(isRealTriangle && isNotSelfLove){
+      count++;      
+    }
   }
-  return count;
+
+  return count / 3;
 };
